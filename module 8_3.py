@@ -1,27 +1,65 @@
-def personal_sum(numbers):
-    result = 0
-    incorrect_data = 0
-    for number in numbers:
-        try:
-            result += number
-        except TypeError:
-            incorrect_data += 1
-            print(f'Некорректный тип данных для подсчёта суммы - {number}')
-    return result, incorrect_data
 
-def calculate_average(numbers):
-    try:
-        total_sum, incorrect_data_count = personal_sum(numbers)
-        average = total_sum / (len(numbers) - incorrect_data_count)
-    except TypeError:
-        print("В numbers записан некорректный тип данных.")
-        return None
-    except ZeroDivisionError:
-        return 0
+class Car:
+    def __init__(self, model: str, vin: int, __numbers: str):
+        self.model = model
+        self.__vin = vin
+        self.__is_valid_vin(vin)
+        self.__numbers = __numbers
+        self.__is_valid_numbers(__numbers)
 
-    return average
 
-print(f'Результат 1: {calculate_average("1, 2, 3")}') # Строка перебирается, но каждый символ - строковый тип
-print(f'Результат 2: {calculate_average([1, "Строка", 3, "Ещё Строка"])}') # Учитываются только 1 и 3
-print(f'Результат 3: {calculate_average(567)}') # Передана не коллекция
-print(f'Результат 4: {calculate_average([42, 15, 36, 13])}') # Всё должно работать
+
+    def __is_valid_vin(self,vin_number):
+        if not isinstance(vin_number, int):
+            raise IncorrectVinNumber('Некорректный тип vin номер')
+        if vin_number < 1000000 or vin_number > 9999999:
+            raise IncorrectVinNumber('Неверный диапазон для vin номера')
+        else:
+            return True
+
+
+    def __is_valid_numbers(self,numbers):
+        if not isinstance(numbers, str):
+            raise IncorrectCarNumbers('Некорректный тип данных для номеров')
+        if len(numbers) != 6:
+            raise IncorrectCarNumbers('Неверная длина номера')
+        else:
+            return True
+
+
+class IncorrectVinNumber(Exception):
+    def __init__(self, message):
+        self.message = message
+
+
+class IncorrectCarNumbers(Exception):
+    def __init__(self, message):
+        self.message = message
+
+
+try:
+    first = Car('Model1', 1000000, 'f123dj')
+except IncorrectVinNumber as exc:
+    print(exc.message)
+except IncorrectCarNumbers as exc:
+    print(exc.message)
+else:
+    print(f'{first.model} успешно создан')
+
+try:
+    second = Car('Model2', 300, 'т001тр')
+except IncorrectVinNumber as exc:
+    print(exc.message)
+except IncorrectCarNumbers as exc:
+    print(exc.message)
+else:
+    print(f'{second.model} успешно создан')
+
+try:
+    third = Car('Model3', 2020202, 'нет номера')
+except IncorrectVinNumber as exc:
+    print(exc.message)
+except IncorrectCarNumbers as exc:
+    print(exc.message)
+else:
+    print(f'{third.model} успешно создан')
