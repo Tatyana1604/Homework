@@ -47,7 +47,7 @@ def introspection(obj):
 number_info = introspection(42)
 print(number_info)
 
-number_info = introspection('red')
+number_info = introspection('молодой')
 print(number_info)
 number_info = introspection(man)
 print(number_info)
